@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #111;
+      color: #0f0;
+      font-size: 24px;
+      padding: 40px;
+    }
+  </style>
+</head>
+<body> 
+  <h1>Status ao vivo</h1>
+  <div id="info">Carregando...</div>
+
+  <script>
+    async function getStatus() {
+      try {
+        const res = await fetch("http://localhost:3000/status"); // troque pelo seu endpoint real
+        const data = await res.json(); // felicidade
+        document.getElementById("info").innerHTML = `
+          Nivel: ${data.nivel} <br>Status: ${data.status}
+        `;
+      } catch (error) {
+        document.getElementById("info").innerHTML = "Erro ao buscar dados.";
+        console.error("Erro ao buscar /status:", error);
+      }
+    }
+
+    getStatus(); // Código para executar ao abrir
+    setInterval(getStatus, 5000); // atualizar a cada 5 segundos
+  </script>
+</body>
+</html>
