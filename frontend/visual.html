@@ -20,7 +20,7 @@
   <script>
     async function getStatus() {
       try {
-        const res = await fetch("http://localhost:3000/status"); // troque pelo seu endpoint real
+        const res = await fetch("/status"); // troque pelo seu endpoint real
         const data = await res.json(); // felicidade
         document.getElementById("info").innerHTML = `
           Nivel: ${data.nivel} <br>Status: ${data.status}
