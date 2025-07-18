@@ -18,8 +18,21 @@ app.post('/update', (req, res) => {
   historico.unshift({ //unshift, insere o novo dado no início da lista (posição 0).O histórico é uma array
     nivel: dados.nivel, //nivel: número recebido.
     status: dados.status, //status: texto atual.
-    timestamp: new Date().toISOString()//timestamp: horário da atualização (formato ISO, como 2025-07-18T14:30:00.000Z).
+    timestamp:formatarDataHora()//timestamp: horário da atualização (formato ISO, como 2025-07-18T14:30:00.000Z).
   });
+    function formatarDataHora() {
+    const agora = new Date();
+
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const mes = String(agora.getMonth() + 1).padStart(2, '0'); // mês começa do 0
+    const ano = String(agora.getFullYear()).slice(-2); // só os dois últimos dígitos
+
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+    const segundos = String(agora.getSeconds()).padStart(2, '0');
+
+    return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`;
+    }
   if (historico.length > 15) {
     historico.pop();
   }
