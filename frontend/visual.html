@@ -73,7 +73,7 @@
           const linha = document.createElement("div");
           linha.className = "historico-item";
 
-          const numero = lista.length - 1;
+          const numero =lista.length - i;
 
           linha.innerText = `${numero}. Nível: ${item.nivel}, Status: ${item.status}, [${item.timestamp}]`;
           div.appendChild(linha);
