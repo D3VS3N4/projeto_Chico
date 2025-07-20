@@ -35,9 +35,6 @@ app.post('/update', (req, res) => {
 
       return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`;
     }
-  if (historico.length > 15) {
-    historico.pop();
-  }
 
   console.log('Dados atualizados:', dados);
   res.send('Atualizado');
