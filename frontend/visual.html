@@ -39,7 +39,7 @@
 
   <script>
 
-    let proximoIndice = 1;
+
 
     async function getStatus() {
       try {
@@ -73,14 +73,11 @@
           const linha = document.createElement("div");
           linha.className = "historico-item";
 
-          const numero = proximoIndice + (lista.length - 1 - i);
+          const numero = lista.length - 1;
 
           linha.innerText = `${numero}. Nível: ${item.nivel}, Status: ${item.status}, [${item.timestamp}]`;
           div.appendChild(linha);
         }
-
-        // Atualiza o contador para a próxima chamada
-        proximoIndice += lista.length;
 
       } catch (error) {
         document.getElementById("historico-lista").innerHTML = "Erro ao carregar histórico.";

@@ -5,6 +5,22 @@ const path = require('path');
 app.use(express.json());
 app.use(require('cors')());
 
+  function formatarDataHora() {
+    const agora = new Date();
+
+    agora.setHours(agora.getHours() - 3); //Colocar em UTC-3
+
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const mes = String(agora.getMonth() + 1).padStart(2, '0'); // mês começa do 0
+    const ano = String(agora.getFullYear()).slice(-2); // só os dois últimos dígitos
+
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+    const segundos = String(agora.getSeconds()).padStart(2, '0');
+
+    return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`;
+  }
+
 // 1. ROTAS DA API PRIMEIRO
 
 let dados = { nivel: 0, status: "OK" };
@@ -20,21 +36,7 @@ app.post('/update', (req, res) => {
     status: dados.status, //status: texto atual.
     timestamp:formatarDataHora()//timestamp: horário da atualização (formato ISO, como 2025-07-18T14:30:00.000Z).
   });
-    function formatarDataHora() {
-      const agora = new Date();
 
-      agora.setHours(agora.getHours() - 3); //Colocar em UTC-3
-
-      const dia = String(agora.getDate()).padStart(2, '0');
-      const mes = String(agora.getMonth() + 1).padStart(2, '0'); // mês começa do 0
-      const ano = String(agora.getFullYear()).slice(-2); // só os dois últimos dígitos
-
-      const horas = String(agora.getHours()).padStart(2, '0');
-      const minutos = String(agora.getMinutes()).padStart(2, '0');
-      const segundos = String(agora.getSeconds()).padStart(2, '0');
-
-      return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`;
-    }
 
   console.log('Dados atualizados:', dados);
   res.send('Atualizado');
