@@ -88,6 +88,20 @@
       }
     }
 
+    function toggleHistorico() {
+      const historicoDiv = document.getElementById("historico");
+      const toggle = document.querySelector(".toggle");
+
+      if (historicoDiv.style.display === "none") {
+        historicoDiv.style.display = "block";
+        toggle.innerText = "Ocultar histórico";
+        getHistorico(); // carrega só quando abre
+      } else {
+        historicoDiv.style.display = "none";
+        toggle.innerText = "Ver histórico";
+      }
+    }
+
     getStatus();
     setInterval(getStatus, 5000);
   </script>
