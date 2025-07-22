@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://franciscomoreira0202:JX8BOG9nzNQe9KkM@cluster0.udrclc3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect('mongodb+srv://franciscomoreira0202:JX8BOG9nzNQe9KkM@cluster0.udrclc3.mongodb.net/dashboard?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('🟢 MongoDB conectado!'))
   .catch((err) => console.error('🔴 Erro ao conectar MongoDB:', err));
 
