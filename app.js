@@ -1,6 +1,17 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb+srv://franciscomoreira0202:<JX8BOG9nzNQe9KkM>@cluster0.udrclc3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+  .then(() => console.log('🟢 MongoDB conectado!'))
+  .catch((err) => console.error('🔴 Erro ao conectar MongoDB:', err));
+
+const Historico = mongoose.model('Historico', new mongoose.Schema({
+  nivel: Number,
+  status: String,
+  timestamp: String
+}));
 
 app.use(express.json());
 app.use(require('cors')());
@@ -28,22 +39,33 @@ let historico = []; //array
 
 app.get('/status', (req, res) => res.json(dados));
 
-app.post('/update', (req, res) => {
+app.post('/update', async (req, res) => {
   dados = req.body; //req.body = dados enviados no corpo da requisição (geralmente JSON).
 
-  historico.unshift({ //unshift, insere o novo dado no início da lista (posição 0).O histórico é uma array
-    nivel: dados.nivel, //nivel: número recebido.
-    status: dados.status, //status: texto atual.
-    timestamp:formatarDataHora()//timestamp: horário da atualização (formato ISO, como 2025-07-18T14:30:00.000Z).
-  });
+    const novoItem = {
+    nivel: dados.nivel,
+    status: dados.status,
+    timestamp: formatarDataHora()
+  };
 
-
-  console.log('Dados atualizados:', dados);
-  res.send('Atualizado');
+  try {
+    await Historico.create(novoItem);
+    console.log('📝 Dado salvo:', novoItem);
+    res.send('Atualizado e salvo no banco');
+  } catch (err) {
+    console.error('Erro ao salvar no MongoDB:', err);
+    res.status(500).send('Erro ao salvar');
+  }
 });
 
-app.get('/historico', (req, res) => {
-  res.json(historico);
+app.get('/historico', async (req, res) => {
+  try {
+    const registros = await Historico.find().sort({ timestamp: -1 }); // opcional: ordena do mais recente para o mais antigo
+    res.json(registros);
+  } catch (err) {
+    console.error('Erro ao buscar histórico:', err);
+    res.status(500).send('Erro ao buscar histórico');
+  }
 });
 
 // 2. ARQUIVOS ESTÁTICOS DEPOIS
