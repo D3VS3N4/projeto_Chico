@@ -57,6 +57,11 @@
     async function getHistorico() {
       try {
         const res = await fetch("/historico");
+        if(!res.ok) {
+          const erro = await res.text();
+          throw new Error(erro);
+        }
+
         const lista = await res.json();
         const div = document.getElementById("historico-lista");
 
@@ -69,12 +74,10 @@
         
         for (let i = 0; i < lista.length; i++) {
           const item = lista[i];
+          const numero =lista.length - i;
 
           const linha = document.createElement("div");
           linha.className = "historico-item";
-
-          const numero =lista.length - i;
-
           linha.innerText = `${numero}. Nível: ${item.nivel}, Status: ${item.status}, [${item.timestamp}]`;
           div.appendChild(linha);
         }
