@@ -44,7 +44,7 @@ app.post('/update', async (req, res) => {
     const novoItem = {
     nivel: dados.nivel,
     status: dados.status,
-    timestamp: formatarDataHora()
+    timestamp: new Date()
   };
 
   try {
