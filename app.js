@@ -16,22 +16,6 @@ const Historico = mongoose.model('Historico', new mongoose.Schema({
 app.use(express.json());
 app.use(require('cors')());
 
-  function formatarDataHora() {
-    const agora = new Date();
-
-    agora.setHours(agora.getHours() - 3); //Colocar em UTC-3
-
-    const dia = String(agora.getDate()).padStart(2, '0');
-    const mes = String(agora.getMonth() + 1).padStart(2, '0'); // mês começa do 0
-    const ano = String(agora.getFullYear()).slice(-2); // só os dois últimos dígitos
-
-    const horas = String(agora.getHours()).padStart(2, '0');
-    const minutos = String(agora.getMinutes()).padStart(2, '0');
-    const segundos = String(agora.getSeconds()).padStart(2, '0');
-
-    return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`;
-  }
-
 // 1. ROTAS DA API PRIMEIRO
 
 let dados = { nivel: 0, status: "OK" };
@@ -59,11 +43,29 @@ app.post('/update', async (req, res) => {
 
 app.get('/historico', async (req, res) => {
   try {
-    const registros = await Historico.find().sort({ timestamp: -1 }); // opcional: ordena do mais recente para o mais antigo
-    res.json(registros);
+    const registros = await Historico.find().sort({ timestamp: -1 }); //coloca em ordem
+    const formatados = registros.map(item => {
+      const data = new Date(item.timestamp);
+      data.setHours(data.getHours() - 3); // ajustar UTC-3
+
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = String(data.getFullYear()).slice(-2);
+      const horas = String(data.getHours()).padStart(2, '0');
+      const minutos = String(data.getMinutes()).padStart(2, '0');
+      const segundos = String(data.getSeconds()).padStart(2, '0');
+
+      return {
+        _id: item._id,
+        nivel: item.nivel,
+        status: item.status,
+        timestamp: `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`
+      };
+    });
+    res.json(formatados);
   } catch (err) {
     console.error('Erro ao buscar histórico:', err);
-    res.status(500).json({erro:'Erro ao buscar histórico',  detalhes: err.message, stack: err.stack});
+    res.status(500).json({ erro: 'Erro ao buscar histórico', detalhes: err.message });
   }
 });
 
