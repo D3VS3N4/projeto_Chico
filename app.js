@@ -10,7 +10,7 @@ mongoose.connect('mongodb+srv://franciscomoreira0202:JX8BOG9nzNQe9KkM@cluster0.u
 const Historico = mongoose.model('Historico', new mongoose.Schema({
   nivel: Number,
   status: String,
-  timestamp: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: formatarDataHora }
 }));
 
 app.use(express.json());
