@@ -53,7 +53,7 @@ app.post('/update', async (req, res) => {
     res.send('Atualizado e salvo no banco');
   } catch (err) {
     console.error('Erro ao salvar no MongoDB:', err);
-    res.status(500).send('Erro ao salvar: ${err.message}');
+    res.status(500).send(`Erro ao salvar: ${err.message}`);
   }
 });
 
