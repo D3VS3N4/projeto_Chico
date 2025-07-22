@@ -35,7 +35,6 @@ app.use(require('cors')());
 // 1. ROTAS DA API PRIMEIRO
 
 let dados = { nivel: 0, status: "OK" };
-let historico = []; //array
 
 app.get('/status', (req, res) => res.json(dados));
 
@@ -45,7 +44,7 @@ app.post('/update', async (req, res) => {
     const novoItem = {
     nivel: dados.nivel,
     status: dados.status,
-    timestamp: new Date()
+    timestamp: formatarDataHora()
   };
 
   try {
