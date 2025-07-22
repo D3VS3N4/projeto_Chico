@@ -64,7 +64,7 @@ app.get('/historico', async (req, res) => {
     res.json(registros);
   } catch (err) {
     console.error('Erro ao buscar histórico:', err);
-    res.status(500).send('Erro ao buscar histórico');
+    res.status(500).json({erro:'Erro ao buscar histórico'});
   }
 });
 
