@@ -37,31 +37,22 @@
       <div id="historico-lista">Carregando histórico...</div>
     </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script>
+    const socket = io();
 
-
-
-    async function getStatus() {
-      try {
-        const res = await fetch("/status");
-        const data = await res.json();
-        document.getElementById("info").innerHTML = `
-          Nivel: ${data.nivel} <br>Status: ${data.status}
-        `;
-      } catch (error) {
-        document.getElementById("info").innerHTML = "Erro ao buscar dados.";
-        console.error("Erro ao buscar /status:", error);
-      }
+    function atualizarStatus(data) {
+      document.getElementById("info").innerHTML = `
+        Nivel: ${data.nivel} <br>Status: ${data.status} <br><small>${data.timestamp}</small>
+      `;
     }
+    socket.on("status_atualizado", (data) => {
+      atualizarStatus(data);
+    });
 
     async function getHistorico() {
       try {
         const res = await fetch("/historico");
-        if(!res.ok) {
-          const erro = await res.text();
-          throw new Error(erro);
-        }
-
         const lista = await res.json();
         const div = document.getElementById("historico-lista");
 
@@ -102,8 +93,9 @@
       }
     }
 
-    getStatus();
-    setInterval(getStatus, 5000);
+    fetch("/status")
+      .then(res => res.json())
+      .then(data => atualizarStatus(data));
   </script>
 </body>
 </html>

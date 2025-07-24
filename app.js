@@ -1,12 +1,20 @@
 const express = require('express');
-const app = express();
+const http = require('http');
 const path = require('path');
 const mongoose = require('mongoose');
 
+const app = express();
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+
+//Conecta ao banco
 mongoose.connect('mongodb+srv://franciscomoreira0202:JX8BOG9nzNQe9KkM@cluster0.udrclc3.mongodb.net/historicoDB?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('🟢 MongoDB conectado!'))
   .catch((err) => console.error('🔴 Erro ao conectar MongoDB:', err));
 
+
+//Define modelo do histórico no banco
 const Historico = mongoose.model('Historico', new mongoose.Schema({
   nivel: Number,
   status: String,
@@ -20,7 +28,11 @@ app.use(require('cors')());
 
 let dados = { nivel: 0, status: "OK" };
 
+//Rota status
+
 app.get('/status', (req, res) => res.json(dados));
+
+//Rota update
 
 app.post('/update', async (req, res) => {
   dados = req.body; //req.body = dados enviados no corpo da requisição (geralmente JSON).
@@ -40,6 +52,8 @@ app.post('/update', async (req, res) => {
     res.status(500).send(`Erro ao salvar: ${err.message}`);
   }
 });
+
+//Rota histórico
 
 app.get('/historico', async (req, res) => {
   try {
@@ -84,6 +98,4 @@ app.get('/', (req, res) => {
 // 4. listen() NO FINAL
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`API rodando na porta ${PORT}`));
-
-//Fim
+server.listen(PORT, () => console.log(`API rodando na porta ${PORT}`));
