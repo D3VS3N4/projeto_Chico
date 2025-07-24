@@ -43,8 +43,7 @@
 
     function atualizarStatus(data) {
       document.getElementById("info").innerHTML = `
-        Nivel: ${data.nivel} <br>Status: ${data.status} <br><small>${data.timestamp}</small>
-      `;
+        Nivel: ${data.nivel} <br>Status: ${data.status}`;
     }
     socket.on("status_atualizado", (data) => {
       atualizarStatus(data);
