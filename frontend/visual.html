@@ -42,11 +42,18 @@
     const socket = io();
 
     function atualizarStatus(data) {
-      document.getElementById("info").innerHTML = `
-        Nivel: ${data.nivel} <br>Status: ${data.status}`;
+      document.getElementById("info").innerHTML = ` Nivel: ${data.nivel} <br>Status: ${data.status}`;
     }
+
+    //Atualiza em tempo real
     socket.on("status_atualizado", (data) => {
       atualizarStatus(data);
+
+      // Se o histórico estiver visível, atualiza ele também
+      const historicoDiv = document.getElementById("historico");
+      if (historicoDiv.style.display !== "none") {
+        getHistorico();
+      }
     });
 
     async function getHistorico() {
