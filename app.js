@@ -38,14 +38,17 @@ app.post('/update', async (req, res) => {
   dados = req.body; //req.body = dados enviados no corpo da requisição (geralmente JSON).
 
     const novoItem = {
-    nivel: dados.nivel,
-    status: dados.status,
-    timestamp: new Date()
+      nivel: dados.nivel,
+      status: dados.status,
+      timestamp: new Date()
   };
 
   try {
     await Historico.create(novoItem);
     console.log('📝 Dado salvo:', novoItem);
+
+    io.emit("status_atualizado", novoItem);
+    
     res.send('Atualizado e salvo no banco');
   } catch (err) {
     console.error('Erro ao salvar no MongoDB:', err);
