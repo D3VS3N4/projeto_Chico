@@ -140,8 +140,10 @@
     fetch("/status")
       .then(res => res.json())
       .then(data => atualizarStatus(data));
-      
-    getHistorico();
+      // Só mostra a linha "Atual" se o dado for válido
+      if (data && data.timestamp && data.nivel !== 0) {
+        atualizarStatus(data);
+      }
   </script>
 </body>
 </html>
