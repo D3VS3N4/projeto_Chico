@@ -61,6 +61,7 @@
       linha.style.backgroundColor = "#111"; // destaque
 
       linha.innerHTML = `
+        <td>Atual</td>
         <td>${data.nivel}</td>
         <td>${data.status}</td>
         <td>${data.timestamp}</td>
@@ -96,8 +97,11 @@
           tabela.appendChild(linha);
           return;
         }
-        
-        for (let i = 0; i < lista.length; i++) {
+
+        // Filtra lista para remover itens padrão (exemplo: nível 0 e status OK)
+        const listaFiltrada = lista.filter(item => !(item.nivel === 0 && item.status === "OK"));
+
+        for (let i = 0; i < listaFiltrada.length; i++) {
           const item = lista[i];
           const numero =lista.length - i;
 

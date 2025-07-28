@@ -61,7 +61,8 @@ app.post('/update', async (req, res) => {
 app.get('/historico', async (req, res) => {
   try {
     const registros = await Historico.find().sort({ timestamp: -1 }); //coloca em ordem
-    const formatados = registros.map(item => {
+    const registrosFiltrados = registros.filter(item => !(item.nivel === 0 && item.status === "OK"));
+    const formatados = registrosFiltrados.map(item => {
       const data = new Date(item.timestamp);
       data.setHours(data.getHours() - 3); // ajustar UTC-3
 
