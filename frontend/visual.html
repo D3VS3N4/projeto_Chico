@@ -29,8 +29,8 @@
   </style>
 </head>
 <body> 
-  <h1>Status ao vivo</h1>
-  <table id="tabela-historico" style="border: 1px solid #0f0; width: 100%; color: #0f0; border-collapse: collapse;">
+  <h2>Histórico</h2>
+  <table class="tabela-historico" id="tabela-status">
     <thead>
       <tr>
         <th>Nº</th>
@@ -39,47 +39,64 @@
         <th>Data e Hora</th>
       </tr>
     </thead>
-    <tbody id="tabela-corpo">
+    <tbody id="corpo-tabela">
       <tr><td colspan="4">Carregando histórico...</td></tr>
     </tbody>
   </table>
-  
-    <div class="toggle" onclick="toggleHistorico()">Ver histórico</div>
-    <div id="historico" class="historico" style="display: none;">
-      <div id="historico-lista">Carregando histórico...</div>
-    </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
 
     function atualizarStatus(data) {
-      document.getElementById("info").innerHTML = ` Nivel: ${data.nivel} <br>Status: ${data.status}`;
+      const tabela = document.getElementById("corpo-tabela");
+
+      // Remove a primeira linha antiga de status atual (se houver)
+      const linhaStatusAntigo = document.getElementById("status-atual-linha");
+      if (linhaStatusAntigo) linhaStatusAntigo.remove();
+
+      // Cria nova linha de status atual
+      const linha = document.createElement("tr");
+      linha.id = "status-atual-linha";
+      linha.style.backgroundColor = "#111"; // destaque
+
+      linha.innerHTML = `
+        <td>Atual</td>
+        <td>${data.nivel}</td>
+        <td>${data.status}</td>
+        <td>${data.timestamp}</td>
+      `;
+
+      // Insere no início do tbody
+      tabela.insertBefore(linha, tabela.firstChild);
     }
 
     //Atualiza em tempo real
     socket.on("status_atualizado", (data) => {
       atualizarStatus(data);
-
-      // Se o histórico estiver visível, atualiza ele também
-      const historicoDiv = document.getElementById("historico");
-      if (historicoDiv.style.display !== "none") {
-        getHistorico();
-      }
+      getHistorico();
     });
 
     async function getHistorico() {
       try {
         const res = await fetch("/historico");
         const lista = await res.json();
-        const corpoTabela = document.getElementById("tabela-corpo");// cria elementos <tr> e <td> para montar a tabela linha por linha.
+        const tabela = document.getElementById("corpo-tabela");// cria elementos <tr> e <td> para montar a tabela linha por linha.
+
+        // Remove todas as linhas exceto a primeira (status atual)
+        const linhas = Array.from(tabela.querySelectorAll("tr"));
+        linhas.forEach((linha, index) => {
+          if (index !== 0 && linha.id !== "status-atual-linha") {
+            linha.remove();
+          }
+        });
 
         if (lista.length === 0) {
-          corpoTabela.innerHTML = `<tr><td colspan="4">Nenhuma atualização ainda.</td></tr>`;
+          const linha = document.createElement("tr");
+          linha.innerHTML = `<td colspan="4">Nenhuma atualização ainda.</td>`;
+          tabela.appendChild(linha);
           return;
         }
-
-        corpoTabela.innerHTML = ""; // limpa a tabela
         
         for (let i = 0; i < lista.length; i++) {
           const item = lista[i];
@@ -94,32 +111,19 @@
             <td>${item.timestamp}</td>
           `;
 
-          corpoTabela.appendChild(linha);
+          tabela.appendChild(linha);
         }
 
       } catch (error) {
-       const corpoTabela = document.getElementById("tabela-corpo");
-        corpoTabela.innerHTML = `<tr><td colspan="4">Erro ao carregar histórico.</td></tr>`;
-        console.error("Erro ao buscar /historico:", error);
-      }
-    }
-    function toggleHistorico() {
-      const historicoDiv = document.getElementById("historico");
-      const toggle = document.querySelector(".toggle");
-
-      if (historicoDiv.style.display === "none") {
-        historicoDiv.style.display = "block";
-        toggle.innerText = "Ocultar histórico";
-        getHistorico(); // carrega só quando abre
-      } else {
-        historicoDiv.style.display = "none";
-        toggle.innerText = "Ver histórico";
+       console.error("Erro ao carregar histórico:", error);
       }
     }
 
     fetch("/status")
       .then(res => res.json())
       .then(data => atualizarStatus(data));
+      
+    getHistorico();
   </script>
 </body>
 </html>
