@@ -93,13 +93,14 @@
       atualizarStatus(data);
       getHistorico();
     });
-
+    
     async function getHistorico() {
       try {
-        tabela.innerHTML = "";
         const res = await fetch("/historico");
         const lista = await res.json();
         const tabela = document.getElementById("corpo-tabela");// cria elementos <tr> e <td> para montar a tabela linha por linha.
+
+        tabela.innerHTML = "";
 
         // Remove todas as linhas exceto a primeira (status atual)
         const linhas = Array.from(tabela.querySelectorAll("tr"));
