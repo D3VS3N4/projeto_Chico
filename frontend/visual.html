@@ -63,7 +63,27 @@
   <script>
     const socket = io();
 
-    
+    function atualizarStatus(data) {
+      const tabela = document.getElementById("corpo-tabela");
+
+      // Remove a primeira linha antiga de status atual (se houver)
+      const linhaStatusAntigo = document.getElementById("status-atual-linha");
+      if (linhaStatusAntigo) linhaStatusAntigo.remove();
+
+      // Cria nova linha de status atual
+      const linha = document.createElement("tr");
+      linha.id = "status-atual-linha";
+      linha.style.backgroundColor = "#111"; // destaque
+
+      linha.innerHTML = `
+        <td>${data.nivel}</td>
+        <td>${data.status}</td>
+        <td>${data.timestamp}</td>
+      `;
+
+      // Insere no início do tbody
+      tabela.insertBefore(linha, tabela.firstChild);
+    }
 
     //Atualiza em tempo real
     socket.on("status_atualizado", (data) => {
