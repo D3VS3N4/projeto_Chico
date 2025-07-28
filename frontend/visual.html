@@ -30,7 +30,19 @@
 </head>
 <body> 
   <h1>Status ao vivo</h1>
-   <div id="info">Carregando...</div>
+  <table id="tabela-historico" style="border: 1px solid #0f0; width: 100%; color: #0f0; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Nº</th>
+        <th>Nível</th>
+        <th>Status</th>
+        <th>Data e Hora</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-corpo">
+      <tr><td colspan="4">Carregando histórico...</td></tr>
+    </tbody>
+  </table>
   
     <div class="toggle" onclick="toggleHistorico()">Ver histórico</div>
     <div id="historico" class="historico" style="display: none;">
@@ -60,31 +72,37 @@
       try {
         const res = await fetch("/historico");
         const lista = await res.json();
-        const div = document.getElementById("historico-lista");
+        const corpoTabela = document.getElementById("tabela-corpo");// cria elementos <tr> e <td> para montar a tabela linha por linha.
 
         if (lista.length === 0) {
-          div.innerHTML = "Nenhuma atualização ainda.";
+          corpoTabela.innerHTML = `<tr><td colspan="4">Nenhuma atualização ainda.</td></tr>`;
           return;
         }
 
-        div.innerHTML = "";
+        corpoTabela.innerHTML = ""; // limpa a tabela
         
         for (let i = 0; i < lista.length; i++) {
           const item = lista[i];
           const numero =lista.length - i;
 
-          const linha = document.createElement("div");
-          linha.className = "historico-item";
-          linha.innerText = `${numero}. Nível: ${item.nivel}, Status: ${item.status}, [${item.timestamp}]`;
-          div.appendChild(linha);
+          const linha = document.createElement("tr"); //Cria a nova tr(linha)
+
+          linha.innerHTML = `
+            <td>${numero}</td>
+            <td>${item.nivel}</td>
+            <td>${item.status}</td>
+            <td>${item.timestamp}</td>
+          `;
+
+          corpoTabela.appendChild(linha);
         }
 
       } catch (error) {
-        document.getElementById("historico-lista").innerHTML = "Erro ao carregar histórico.";
+       const corpoTabela = document.getElementById("tabela-corpo");
+        corpoTabela.innerHTML = `<tr><td colspan="4">Erro ao carregar histórico.</td></tr>`;
         console.error("Erro ao buscar /historico:", error);
       }
     }
-
     function toggleHistorico() {
       const historicoDiv = document.getElementById("historico");
       const toggle = document.querySelector(".toggle");
