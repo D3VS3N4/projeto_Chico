@@ -62,6 +62,9 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
+    socket.on("connect", () => {
+    console.log("Socket conectado");
+    });
 
     function atualizarStatus(data) {
       if (!data || data.nivel === 0 && data.status === "OK") {
