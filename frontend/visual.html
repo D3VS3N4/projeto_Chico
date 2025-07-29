@@ -93,11 +93,7 @@
       linha.id = "status-atual-linha";
       linha.style.backgroundColor = "#111";
 
-      linha.innerHTML = `
-        <td>${data.nivel}</td>
-        <td>${data.status}</td>
-        <td>${formatarDataHora(data.timestamp)}</td>
-      `;
+
 
       tabela.insertBefore(linha, tabela.firstChild);
     }
