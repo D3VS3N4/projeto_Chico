@@ -91,9 +91,7 @@
 
       const linha = document.createElement("tr");
       linha.id = "status-atual-linha";
-      linha.style.backgroundColor = "#111";
-
-
+      linha.style.backgroundColor = "#111"; 
 
       tabela.insertBefore(linha, tabela.firstChild);
     }
@@ -113,13 +111,7 @@
 
         tabela.innerHTML = "";
 
-        // Remove todas as linhas exceto a primeira (status atual)
-        const linhas = Array.from(tabela.querySelectorAll("tr"));
-        linhas.forEach((linha, index) => {
-          if (index !== 0 && linha.id !== "status-atual-linha") {
-            linha.remove();
-          }
-        });
+        
 
         if (lista.length === 0) {
           const linha = document.createElement("tr");
