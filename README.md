@@ -1,6 +1,9 @@
 ## Para que foi feito?🤷‍♂️
 
-Este projeto foi feito para fazer marcações de produtos, ou até mesmo de consultas,contendo requisições get e post,afim de receber e armazenar os dados dinamicamente,e mostrá-los quando necessário!
+Esta aplicação realiza requisições GET e POST para monitorar e registrar o status de um produto em tempo real.
+O sistema coleta periodicamente dados de nível e status, armazena essas informações em um banco de dados e atualiza os registros conforme novas leituras são enviadas.
+
+A interface exibe o status atual ao vivo e um histórico completo das atualizações, permitindo o acompanhamento contínuo das variações de nível e condição do produto.
 
 ## Quais as ferramentas ultilizadas?🛠️
 
