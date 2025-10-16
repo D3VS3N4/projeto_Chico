@@ -15,3 +15,5 @@ Back-end;💻
 
 Banco de dados;🎲
 - MongoDB (banco não estruturado)
+
+## Em desenlvolvimento...🔀
